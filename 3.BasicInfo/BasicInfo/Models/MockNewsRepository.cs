@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace BasicInfo.Models
 {
-    public static class NewsBase
+    public class MockNewsRepository : INewsRepository 
     {
-        public static List<News> News = new List<News>
+        private List<News> _news = new List<News>
         {
             new News { Id = 0, Title = "Humanity finally colonized the Mercury!!", Text = "", AuthorName = "Jeremy Clarkson", IsFake = true},
             new News { Id = 1, Title = "Increase your lifespan by 10 years, every morning you need...", Text = "", AuthorName = "Svetlana Sokolova", IsFake = true},
@@ -15,5 +15,10 @@ namespace BasicInfo.Models
             new News { Id = 3, Title = "Ukraine reduces the cost of its obligations!", Text = "", AuthorName = "Cerol Denvers", IsFake = false},
             new News { Id = 4, Title = "A species were discovered in Africa: it is blue legless cat", Text = "", AuthorName = "Jimmy Felon", IsFake = true}
         };
+
+        public List<News> GetNews()
+        {
+            return _news;
+        }
     }
 }
