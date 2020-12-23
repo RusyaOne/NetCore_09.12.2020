@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RestApiExample.Models
+namespace BasicInfo.Models
 {
-    public class MockNewsRepository : INewsRepository
+    public class MockNewsRepository : INewsRepository 
     {
-        private List<News> News = new List<News>
+        private List<News> _news = new List<News>
         {
             new News { Id = 0, Title = "Humanity finally colonized the Mercury!!", Text = "", AuthorName = "Jeremy Clarkson", IsFake = true},
             new News { Id = 1, Title = "Increase your lifespan by 10 years, every morning you need...", Text = "", AuthorName = "Svetlana Sokolova", IsFake = true},
@@ -16,14 +16,9 @@ namespace RestApiExample.Models
             new News { Id = 4, Title = "A species were discovered in Africa: it is blue legless cat", Text = "", AuthorName = "Jimmy Felon", IsFake = true}
         };
 
-        public IEnumerable<News> GetAllNews()
+        public List<News> GetNews()
         {
-            return News;
-        }
-
-        public void CreateNews(News news)
-        {
-            News.Add(news);
+            return _news;
         }
     }
 }

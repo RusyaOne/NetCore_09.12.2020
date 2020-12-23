@@ -1,33 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RestApiExample.Models;
+﻿using BasicInfo.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RestApiExample.Controllers
+namespace BasicInfo.Controllers
 {
-    [ApiController]
-    public class NewsController : ControllerBase
+    public class NewsController : Controller
     {
-        private INewsRepository _repository { get; }
+        private INewsRepository _newsRepository { get; }
 
-        public NewsController(INewsRepository repository)
+        public NewsController(INewsRepository newsRepository)
         {
-            _repository = repository;
+            _newsRepository = newsRepository;
         }
 
-
-        [HttpGet("News")]
-        public IEnumerable<News> GetNews([FromServices] INewsRepository repo)
+        public IActionResult Index(string name)
         {
-            return repo.GetAllNews();
+            ViewData["name"] = name;
+            return View();
         }
 
-        [HttpPost("News")]
-        public void CreateNews(News news)
+        public IActionResult Show(int id)
         {
-            _repository.CreateNews(news);
+            ViewData["news"] = _newsRepository.GetNews().Single(news => news.Id == id).Title;
+            return View();
         }
     }
 }

@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RestApiExample.Models
+namespace BasicInfo.Models
 {
     public interface INewsRepository
     {
-        public IEnumerable<News> GetAllNews();
-
-        void CreateNews(News news);
+        List<News> GetNews();
     }
 }

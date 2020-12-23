@@ -1,9 +1,11 @@
 using Infestation.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace Infestation
 {
@@ -21,6 +23,8 @@ namespace Infestation
         {
             services.AddControllersWithViews();
 
+            services.AddScoped<IHumanRepository, HumanRepository>();
+
             services.AddDbContext<InfestationDbContext>();
         }
 
@@ -37,7 +41,21 @@ namespace Infestation
             }
             app.UseStaticFiles();
 
+            app.Use(request => async context =>
+            {
+                Console.WriteLine($"Endpoint 1: {context.GetEndpoint()?.DisplayName ?? "null"}");
+                await request(context);
+                Console.WriteLine($"Endpoint 1 back: {context.GetEndpoint()?.DisplayName ?? "null"}");
+            });
+
             app.UseRouting();
+
+            app.Use(request => async context =>
+            {
+                Console.WriteLine($"Endpoint 2: {context.GetEndpoint()?.DisplayName ?? "null"}");
+                await request(context);
+                Console.WriteLine($"Endpoint 2 back: {context.GetEndpoint()?.DisplayName ?? "null"}");
+            });
 
             app.UseAuthorization();
 
