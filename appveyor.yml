@@ -1,0 +1,19 @@
+version: 1.0.{build}
+configuration: Release
+cache: 
+    - packages -> **\packages.config
+environment:
+    matrix:
+    - solution_folder: 1.Introduction/Introduction
+      full_project_name: 1.Introduction/Introduction/Introduction.csproj
+
+    - solution_folder: 3.BasicInfo/BasicInfo
+      full_project_name: 3.BasicInfo/SimpleDiExample/SimpleDiExample.csproj
+
+    - solution_folder: Infestation
+      full_project_name: Infestation/Infestation/Infestation.csproj
+
+before_build: nuget restore %solution_folder%
+build: 
+    project: '%full_project_name%'
+    publish_wap: true
