@@ -1,13 +1,11 @@
 ﻿using BasicInfo.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BasicInfo.Controllers
 {
-    public class NewsController : Controller
+    [ApiController]
+    public class NewsController : ControllerBase
     {
         private INewsRepository _newsRepository { get; }
 
@@ -16,16 +14,45 @@ namespace BasicInfo.Controllers
             _newsRepository = newsRepository;
         }
 
-        public IActionResult Index(string name)
+        [HttpGet("News")]
+        public IActionResult Index()
         {
-            ViewData["name"] = name;
-            return View();
+            try
+            {
+                return Ok(_newsRepository.GetNews());
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
-        public IActionResult Show(int id)
+        [HttpPost("News")]
+        public IActionResult AddNews([FromBody] News news)
         {
-            ViewData["news"] = _newsRepository.GetNews().Single(news => news.Id == id).Title;
-            return View();
+            try
+            {
+                _newsRepository.AddNews(news);
+                return Ok();
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpDelete("News")]
+        public IActionResult DeleteNews([FromHeader] int newsId)
+        {
+            try
+            {
+                _newsRepository.DeleteNews(newsId);
+                return Ok();
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

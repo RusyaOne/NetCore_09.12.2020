@@ -1,4 +1,5 @@
 ﻿using Infestation.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -36,9 +37,9 @@ namespace Infestation.Controllers
             {
                 _humanRepository.DeleteHuman(humanId);
             }
-            catch (Exception e)
+            catch
             {
-                return BadRequest(e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
             return View();

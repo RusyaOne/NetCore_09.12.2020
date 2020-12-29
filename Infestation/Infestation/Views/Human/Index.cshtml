@@ -11,7 +11,7 @@
         <th>IsSick</th>
         <th>Gender</th>
     </tr>
-    @foreach (var human in ViewData["Humans"] as List<Human>)
+    @foreach (var human in ViewBag.Humans)
     {
         <tr>
             <td>@human.Id</td>

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace BasicInfo.Models
 {
@@ -19,6 +17,17 @@ namespace BasicInfo.Models
         public List<News> GetNews()
         {
             return _news;
+        }
+
+        public void AddNews(News news)
+        {
+            _news.Add(news);
+        }
+
+        public void DeleteNews(int id)
+        {
+            var news = _news.First(x => x.Id == id);
+            _news.Remove(news);
         }
     }
 }

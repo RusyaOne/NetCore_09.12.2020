@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace BasicInfo.Models
 {
     public interface INewsRepository
     {
         List<News> GetNews();
+
+        void AddNews(News news);
+
+        void DeleteNews(int id);
     }
 }
