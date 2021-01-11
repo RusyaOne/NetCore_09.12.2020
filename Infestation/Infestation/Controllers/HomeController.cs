@@ -1,26 +1,37 @@
 ﻿using Infestation.Models;
+using Infestation.Models.Repositories;
+using Infestation.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Infestation.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IHumanRepository _humanRepository;
+        private readonly ICountryRepository _countryRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger,
+            IHumanRepository humanRepository,
+            ICountryRepository countryRepository)
         {
             _logger = logger;
+            _humanRepository = humanRepository;
+            _countryRepository = countryRepository;
         }
 
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult Info()
+        {
+            var humans = _humanRepository.GetAllHumans();
+            var countries = _countryRepository.GetAllCountries();
+            return View(new HomeInfoViewModel { Humans = humans, Countries = countries });
         }
 
         public IActionResult Privacy()

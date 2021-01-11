@@ -1,12 +1,13 @@
 ﻿using Infestation.Models;
+using Infestation.Models.Repositories;
+using Infestation.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Infestation.Controllers
 {
-    [Route("[controller]")]
     public class HumanController : Controller
     {
         private IHumanRepository _humanRepository { get; }
@@ -16,11 +17,36 @@ namespace Infestation.Controllers
             _humanRepository = humanRepository;
         }
 
-        [Route("[action]/{id?}")]
-        public IActionResult Index(int id)
+        public IActionResult Index(int? humanId)
         {
-            ViewData["Humans"] = _humanRepository.GetAllHumans().Where(human => human.Id == id).ToList();
-            return View();
+            IEnumerable<HumanIndexViewModel> humans;
+
+            if (humanId == null)
+            {
+                humans = _humanRepository.GetAllHumans().Select(
+                    human => new HumanIndexViewModel 
+                    { 
+                        Id = human.Id,
+                        FirstName = human.FirstName,
+                        LastName = human.LastName,
+                        Age = human.Age,
+                        CountryName = human.Country.Name
+                    }).ToList();
+            }
+            else
+            {
+                humans = _humanRepository.GetAllHumans().Where(human => human.Id == humanId).Select(
+                    human => new HumanIndexViewModel
+                    {
+                        Id = human.Id,
+                        FirstName = human.FirstName,
+                        LastName = human.LastName,
+                        Age = human.Age,
+                        CountryName = human.Country.Name
+                    }).ToList();
+            }
+
+            return View(humans);
         }
 
         [Route("countries/{humanId:int:min(1)}")]
@@ -31,11 +57,24 @@ namespace Infestation.Controllers
             return View();
         }
 
-        public IActionResult DeleteHuman(int humanId)
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Human human)
+        {
+            _humanRepository.AddHuman(human);
+            return View();
+        }
+
+        public IActionResult Delete(int humanId)
         {
             try
             {
-                _humanRepository.DeleteHuman(humanId);
+                _humanRepository.RemoveHuman(humanId);
             }
             catch
             {
