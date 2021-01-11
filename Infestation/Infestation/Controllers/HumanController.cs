@@ -10,7 +10,7 @@ namespace Infestation.Controllers
 {
     public class HumanController : Controller
     {
-        private IHumanRepository _humanRepository { get; }
+        private readonly IHumanRepository _humanRepository;
 
         public HumanController(IHumanRepository humanRepository)
         {
@@ -47,14 +47,6 @@ namespace Infestation.Controllers
             }
 
             return View(humans);
-        }
-
-        [Route("countries/{humanId:int:min(1)}")]
-        public IActionResult Country(int humanId)
-        {
-            var human = _humanRepository.GetAllHumans().First(human => human.Id == humanId);
-            ViewData["CountryName"] = human.Country.Name;
-            return View();
         }
 
         [HttpGet]

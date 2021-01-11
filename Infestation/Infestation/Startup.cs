@@ -1,4 +1,5 @@
 using Infestation.Models;
+using Infestation.Models.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -24,6 +25,7 @@ namespace Infestation
             services.AddControllersWithViews();
 
             services.AddScoped<IHumanRepository, HumanRepository>();
+            services.AddScoped<ICountryRepository, CountryRepository>();
 
             services.AddDbContext<InfestationDbContext>();
         }
