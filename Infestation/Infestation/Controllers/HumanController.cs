@@ -58,7 +58,11 @@ namespace Infestation.Controllers
         [HttpPost]
         public IActionResult Create(Human human)
         {
-            _humanRepository.AddHuman(human);
+            if (ModelState.IsValid)
+            {
+                _humanRepository.AddHuman(human);
+            }
+
             return View();
         }
 
