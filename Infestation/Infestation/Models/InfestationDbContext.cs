@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Infestation.Models
 {
-    public class InfestationDbContext : IdentityDbContext
+    public class InfestationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Country> Countries { get; set; }
         public DbSet<Human> Humans { get; set; }

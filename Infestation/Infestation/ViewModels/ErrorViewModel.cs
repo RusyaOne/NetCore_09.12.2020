@@ -1,6 +1,4 @@
-using System;
-
-namespace Infestation.Models
+namespace Infestation.ViewModels
 {
     public class ErrorViewModel
     {
