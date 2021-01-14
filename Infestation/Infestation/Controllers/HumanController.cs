@@ -11,10 +11,13 @@ namespace Infestation.Controllers
     public class HumanController : Controller
     {
         private readonly IHumanRepository _humanRepository;
+        private readonly ICountryRepository _countryRepository;
 
-        public HumanController(IHumanRepository humanRepository)
+        public HumanController(IHumanRepository humanRepository,
+            ICountryRepository countryRepository)
         {
             _humanRepository = humanRepository;
+            _countryRepository = countryRepository;
         }
 
         public IActionResult Index(int? humanId)
@@ -52,15 +55,15 @@ namespace Infestation.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            return View(new HumanCreateViewModel { Countries = _countryRepository.GetAllCountries() });
         }
 
         [HttpPost]
-        public IActionResult Create(Human human)
+        public IActionResult Create(HumanCreateViewModel humanCreateViewModel)
         {
             if (ModelState.IsValid)
             {
-                _humanRepository.AddHuman(human);
+                _humanRepository.AddHuman(humanCreateViewModel.Human);
             }
 
             return View();

@@ -1,33 +1,35 @@
-﻿@model Human
+﻿@model HumanCreateViewModel
 @{
     ViewData["Title"] = "Create human";
 }
 
 <form asp-controller="Human" asp-action="Create" method="post">
-    <div asp-validation-summary="All"></div>
-    <span asp-validation-for="FirstName"></span><br>
-    <label asp-for="FirstName"></label><br>
-    <input asp-for="FirstName" type="text" /><br>
+    <span asp-validation-for="Human.FirstName"></span><br>
+    <label asp-for="Human.FirstName"></label><br>
+    <input asp-for="Human.FirstName" type="text" /><br>
 
-    <span asp-validation-for="LastName"></span><br>
-    <label asp-for="LastName"></label><br>
-    <input asp-for="LastName" type="text" /><br>
+    <span asp-validation-for="Human.LastName"></span><br>
+    <label asp-for="Human.LastName"></label><br>
+    <input asp-for="Human.LastName" type="text" /><br>
 
-    <span asp-validation-for="Age"></span><br>
-    <label asp-for="Age"></label><br>
-    <input asp-for="Age" type="number" /><br><br>
+    <span asp-validation-for="Human.Age"></span><br>
+    <label asp-for="Human.Age"></label><br>
+    <input asp-for="Human.Age" type="number" /><br><br>
 
-    <span asp-validation-for="IsSick"></span><br>
-    <label asp-for="IsSick"></label><br>
-    <input asp-for="IsSick" type="checkbox" /><br>
+    <span asp-validation-for="Human.IsSick"></span><br>
+    <label asp-for="Human.IsSick"></label><br>
+    <input asp-for="Human.IsSick" type="checkbox" /><br>
 
-    <span asp-validation-for="Gender"></span><br>
-    <label asp-for="Gender"></label><br>
-    <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" type="text"></select><br>
+    <label asp-for="Human.Gender"></label><br>
+    <select asp-for="Human.Gender" asp-items="Html.GetEnumSelectList<Gender>()" type="text"></select><br>
 
-    <span asp-validation-for="CountryId"></span><br>
-    <label asp-for="CountryId"></label><br>
-    <input asp-for="CountryId" type="number" /><br>
+    <label>Country name</label><br>
+    <select asp-for="Human.CountryId">
+        @foreach (var country in Model.Countries)
+        {
+            <option value="@country.Id">@country.Name</option>
+        }
+    </select><br>
 
     <button type="submit">Create human</button>
 </form>
