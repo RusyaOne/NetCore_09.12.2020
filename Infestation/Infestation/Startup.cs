@@ -1,13 +1,12 @@
 using Infestation.Models;
 using Infestation.Models.Repositories;
+using Infestation.Models.Repositories.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 
 namespace Infestation
 {
@@ -20,20 +19,19 @@ namespace Infestation
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
 
             services.AddScoped<IHumanRepository, HumanRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<INewsRepository, MockNewsRepository>();
 
             services.AddDbContext<InfestationDbContext>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<InfestationDbContext>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -46,21 +44,7 @@ namespace Infestation
             }
             app.UseStaticFiles();
 
-            app.Use(request => async context =>
-            {
-                Console.WriteLine($"Endpoint 1: {context.GetEndpoint()?.DisplayName ?? "null"}");
-                await request(context);
-                Console.WriteLine($"Endpoint 1 back: {context.GetEndpoint()?.DisplayName ?? "null"}");
-            });
-
             app.UseRouting();
-
-            app.Use(request => async context =>
-            {
-                Console.WriteLine($"Endpoint 2: {context.GetEndpoint()?.DisplayName ?? "null"}");
-                await request(context);
-                Console.WriteLine($"Endpoint 2 back: {context.GetEndpoint()?.DisplayName ?? "null"}");
-            });
 
             app.UseAuthorization();
 

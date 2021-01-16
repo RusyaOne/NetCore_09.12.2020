@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace Infestation.Models.Repositories
+namespace Infestation.Models.Repositories.Interfaces
 {
     public interface IHumanRepository
     {
         IEnumerable<Human> GetAllHumans();
 
-        void RemoveHuman(int humanId);
-
         void AddHuman(Human human);
+
+        void RemoveHuman(int humanId);
     }
 }

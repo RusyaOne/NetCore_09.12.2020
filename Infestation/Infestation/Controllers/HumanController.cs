@@ -1,5 +1,4 @@
-﻿using Infestation.Models;
-using Infestation.Models.Repositories;
+﻿using Infestation.Models.Repositories.Interfaces;
 using Infestation.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,23 +21,7 @@ namespace Infestation.Controllers
 
         public IActionResult Index(int? humanId)
         {
-            IEnumerable<HumanIndexViewModel> humans;
-
-            if (humanId == null)
-            {
-                humans = _humanRepository.GetAllHumans().Select(
-                    human => new HumanIndexViewModel 
-                    { 
-                        Id = human.Id,
-                        FirstName = human.FirstName,
-                        LastName = human.LastName,
-                        Age = human.Age,
-                        CountryName = human.Country.Name
-                    }).ToList();
-            }
-            else
-            {
-                humans = _humanRepository.GetAllHumans().Where(human => human.Id == humanId).Select(
+            IEnumerable<HumanIndexViewModel> humans = _humanRepository.GetAllHumans().Select(
                     human => new HumanIndexViewModel
                     {
                         Id = human.Id,
@@ -46,8 +29,10 @@ namespace Infestation.Controllers
                         LastName = human.LastName,
                         Age = human.Age,
                         CountryName = human.Country.Name
-                    }).ToList();
-            }
+                    });
+
+            if (humanId != null)            
+                humans = humans.Where(human => human.Id == humanId);            
 
             return View(humans);
         }

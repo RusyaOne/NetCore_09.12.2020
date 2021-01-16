@@ -1,5 +1,4 @@
-﻿using Infestation.Models;
-using Infestation.Models.Repositories;
+﻿using Infestation.Models.Repositories.Interfaces;
 using Infestation.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

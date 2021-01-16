@@ -1,0 +1,27 @@
+﻿@model IEnumerable<News>
+@{
+    ViewData["Title"] = "Humans";
+}
+
+@section News
+{
+    <table class="table" style="text-align: center">
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Text</th>
+            <th>AuthorName</th>
+            <th>IsFake</th>
+        </tr>
+        @foreach (var news in Model)
+        {
+            <tr>
+                <td>@news.Id</td>
+                <td>@news.Title</td>
+                <td>@news.Text</td>
+                <td>@news.AuthorName</td>
+                <td>@news.IsFake</td>
+            </tr>
+        }
+    </table>
+}

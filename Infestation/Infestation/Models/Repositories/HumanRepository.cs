@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Infestation.Models.Repositories.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Infestation.Models.Repositories
@@ -12,10 +13,9 @@ namespace Infestation.Models.Repositories
             _context = context;
         }
 
-        public void RemoveHuman(int humanId)
+        public IEnumerable<Human> GetAllHumans()
         {
-            _context.Humans.Remove(_context.Humans.First(human => human.Id == humanId));
-            _context.SaveChanges();
+            return _context.Humans;
         }
 
         public void AddHuman(Human human)
@@ -24,9 +24,10 @@ namespace Infestation.Models.Repositories
             _context.SaveChanges();
         }
 
-        public IEnumerable<Human> GetAllHumans()
+        public void RemoveHuman(int humanId)
         {
-            return _context.Humans;
+            _context.Humans.Remove(_context.Humans.First(human => human.Id == humanId));
+            _context.SaveChanges();
         }
     }
 }

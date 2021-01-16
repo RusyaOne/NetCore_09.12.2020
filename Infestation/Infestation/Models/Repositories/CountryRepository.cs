@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Infestation.Models.Repositories.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace Infestation.Models.Repositories
@@ -6,6 +7,7 @@ namespace Infestation.Models.Repositories
     public class CountryRepository : ICountryRepository
     {
         public InfestationDbContext _context { get; set; }
+
         public CountryRepository(InfestationDbContext context)
         {
             _context = context;
