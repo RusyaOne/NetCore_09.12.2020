@@ -1,5 +1,6 @@
 ﻿using Infestation.Models.Repositories.Interfaces;
 using Infestation.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
@@ -21,6 +22,7 @@ namespace Infestation.Controllers
             _countryRepository = countryRepository;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();

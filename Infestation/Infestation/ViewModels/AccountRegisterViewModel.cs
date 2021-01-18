@@ -13,10 +13,6 @@ namespace Infestation.ViewModels
         public string LastName { get; set; }
 
         [Required]
-        [RegularExpression("^[a-zA-Z0-9 ]*$")]
-        public string UserName { get; set; }
-
-        [Required]
         [EmailAddress]
         public string Email { get; set; }
 
