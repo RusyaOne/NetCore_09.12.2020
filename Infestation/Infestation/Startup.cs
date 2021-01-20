@@ -1,6 +1,8 @@
+using Infestation.Configurations;
 using Infestation.Models;
 using Infestation.Models.Repositories;
 using Infestation.Models.Repositories.Interfaces;
+using Infestation.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,17 +11,18 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace Infestation
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -32,6 +35,7 @@ namespace Infestation
             services.AddScoped<IHumanRepository, HumanRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<INewsRepository, MockNewsRepository>();
+            services.AddScoped<IMessageSender, SmsMessageSender>();
 
             services.AddDbContext<InfestationDbContext>();
 
@@ -44,6 +48,8 @@ namespace Infestation
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
             });
+
+            services.Configure<InfestationConfiguration>(_configuration.GetSection("Infestation"));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -63,11 +69,33 @@ namespace Infestation
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.Use(async (context, next) =>
+            {
+                Console.WriteLine("Before");
+            });
+
+            app.Map("/Account", AccountHandling);
+
+            app.Run(async context =>
+            {
+                Console.WriteLine("Run middleware");
+            });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+        }
+
+        private void AccountHandling(IApplicationBuilder app)
+        {
+            //Console.WriteLine("Map is working");
+
+            app.Run(async context =>
+            {
+                Console.WriteLine("Map is working");
             });
         }
     }
