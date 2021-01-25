@@ -1,6 +1,6 @@
-﻿@model ResourceUploadViewModel
+﻿@model ImageUploadViewModel
 @{
-    var uploadStage = (UploadStage)Model.UploadStage;
+    var uploadStage = Model.UploadStage;
 }
 
 @if (uploadStage == UploadStage.Upload)
@@ -9,11 +9,11 @@
     <form enctype="multipart/form-data" method="post">
         <dl>
             <dt>
-                <label asp-for="File"></label>
+                <label asp-for="Image"></label>
             </dt>
             <dd>
-                <input asp-for="File" type="file">
-                <span asp-validation-for="File"></span>
+                <input asp-for="Image" type="file">
+                <span asp-validation-for="Image"></span>
             </dd>
         </dl>
         <input asp-page-handler="Upload" class="btn" type="submit" value="Upload" />

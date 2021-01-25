@@ -36,13 +36,12 @@ namespace Infestation
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<INewsRepository, MockNewsRepository>();
             services.AddScoped<IMessageSender, SmsMessageSender>();
+
             services.AddSingleton<IRestApiExampleClient, RestApiExampleClient>();
-            services.AddSingleton<FileProcessingChannel>();
 
             services.AddMemoryCache();
 
             services.AddHostedService<LoadFileHostedService>();
-            services.AddHostedService<UploadFileHostedService>();
 
             services.AddDbContext<InfestationDbContext>();
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<InfestationDbContext>();
@@ -55,11 +54,6 @@ namespace Infestation
             });
 
             services.Configure<InfestationConfiguration>(_configuration.GetSection("Infestation"));
-
-            services.Configure<IISServerOptions>(options =>
-            {
-                options.MaxRequestBodySize = int.MaxValue;
-            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -79,33 +73,13 @@ namespace Infestation
             app.UseAuthentication();
             app.UseAuthorization();
 
-            //app.Use(async (context, next) =>
-            //{
-            //    Console.WriteLine("Before");
-            //});
-
-            //app.Map("/Account", AccountHandling);
-
-            //app.Run(async context =>
-            //{
-            //    Console.WriteLine("Run middleware");
-            //});
+            app.UseWriteToConsole("Custom parameter.");
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
-        }
-
-        private void AccountHandling(IApplicationBuilder app)
-        {
-            //Console.WriteLine("Map is working");
-
-            app.Run(async context =>
-            {
-                Console.WriteLine("Map is working");
             });
         }
     }

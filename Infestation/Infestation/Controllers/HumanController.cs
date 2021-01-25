@@ -22,14 +22,14 @@ namespace Infestation.Controllers
         public IActionResult Index(int? humanId)
         {
             IEnumerable<HumanIndexViewModel> humans = _humanRepository.GetAllHumans().Select(
-                    human => new HumanIndexViewModel
-                    {
-                        Id = human.Id,
-                        FirstName = human.FirstName,
-                        LastName = human.LastName,
-                        Age = human.Age,
-                        CountryName = human.Country.Name
-                    });
+                human => new HumanIndexViewModel
+                {
+                    Id = human.Id,
+                    FirstName = human.FirstName,
+                    LastName = human.LastName,
+                    Age = human.Age,
+                    CountryName = human.Country.Name
+                });
 
             if (humanId != null)            
                 humans = humans.Where(human => human.Id == humanId);            

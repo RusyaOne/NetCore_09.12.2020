@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,28 +8,28 @@ namespace Infestation.Services
 {
     public class LoadFileHostedService : BackgroundService
     {
-        private readonly IRestApiExampleClient _restClient;
+        private readonly IRestApiExampleClient _client;
         private readonly IMemoryCache _cache;
 
-        public LoadFileHostedService(IRestApiExampleClient restClient, IMemoryCache memoryCache)
+        public LoadFileHostedService(IRestApiExampleClient client, IMemoryCache cache)
         {
-            _restClient = restClient;
-            _cache = memoryCache;
+            _client = client;
+            _cache = cache;
         }
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                var cacheKey = $"image_{DateTime.UtcNow:yyyy_mm_dd}";
-                var image = _cache.Get<byte[]>(cacheKey);
+                var cacheKey = $"image_{DateTime.UtcNow:yyyy_MM_dd}";
+                var imageBytes = _cache.Get<byte[]>(cacheKey);
 
-                if (image == null)
+                if (imageBytes == null)
                 {
-                    image = _restClient.GetFile();
-                    var memoryCacheEntry = new MemoryCacheEntryOptions();
-                    memoryCacheEntry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2);
-                    _cache.Set<byte[]>(cacheKey, image, memoryCacheEntry);
+                    imageBytes = _client.GetFileBytes();
+                    var options = new MemoryCacheEntryOptions();
+                    options.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2);
+                    _cache.Set<byte[]>(cacheKey, imageBytes, options);
                 }
 
                 await Task.Delay(TimeSpan.FromMinutes(1));
