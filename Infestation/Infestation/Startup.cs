@@ -36,11 +36,16 @@ namespace Infestation
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<INewsRepository, MockNewsRepository>();
             services.AddScoped<IMessageSender, SmsMessageSender>();
+            services.AddSingleton<IRestApiExampleClient, RestApiExampleClient>();
+            services.AddSingleton<FileProcessingChannel>();
+
+            services.AddMemoryCache();
+
+            services.AddHostedService<LoadFileHostedService>();
+            services.AddHostedService<UploadFileHostedService>();
 
             services.AddDbContext<InfestationDbContext>();
-
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<InfestationDbContext>();
-
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -50,6 +55,11 @@ namespace Infestation
             });
 
             services.Configure<InfestationConfiguration>(_configuration.GetSection("Infestation"));
+
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.MaxRequestBodySize = int.MaxValue;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -69,17 +79,17 @@ namespace Infestation
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.Use(async (context, next) =>
-            {
-                Console.WriteLine("Before");
-            });
+            //app.Use(async (context, next) =>
+            //{
+            //    Console.WriteLine("Before");
+            //});
 
-            app.Map("/Account", AccountHandling);
+            //app.Map("/Account", AccountHandling);
 
-            app.Run(async context =>
-            {
-                Console.WriteLine("Run middleware");
-            });
+            //app.Run(async context =>
+            //{
+            //    Console.WriteLine("Run middleware");
+            //});
 
             app.UseEndpoints(endpoints =>
             {

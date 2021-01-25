@@ -1,6 +1,5 @@
 ﻿using Infestation.Models.Repositories.Interfaces;
 using Infestation.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -38,14 +37,12 @@ namespace Infestation.Controllers
             return View(humans);
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult Create()
         {
             return View(new HumanCreateViewModel { Countries = _countryRepository.GetAllCountries() });
         }
 
-        [Authorize]
         [HttpPost]
         public IActionResult Create(HumanCreateViewModel humanCreateViewModel)
         {
