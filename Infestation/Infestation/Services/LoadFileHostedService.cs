@@ -21,8 +21,8 @@ namespace Infestation.Services
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                var cacheKey = $"image_{DateTime.UtcNow:yyyy_MM_dd}";
-                var imageBytes = _cache.Get<byte[]>(cacheKey);
+                string cacheKey = $"image_{DateTime.UtcNow:yyyy_MM_dd}";
+                byte[] imageBytes = _cache.Get<byte[]>(cacheKey);
 
                 if (imageBytes == null)
                 {

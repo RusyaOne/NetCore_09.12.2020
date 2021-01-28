@@ -1,8 +1,10 @@
-﻿namespace Infestation.ViewModels
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Infestation.ViewModels
 {
     public class ImageUploadViewModel
     {
-        public byte[] Image { get; set; }
+        public IFormFile Image { get; set; }
         public UploadStage UploadStage { get; set; }
     }
 

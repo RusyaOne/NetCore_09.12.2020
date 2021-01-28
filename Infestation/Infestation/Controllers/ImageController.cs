@@ -13,11 +13,13 @@ namespace Infestation.Controllers
     {
         private readonly IRestApiExampleClient _client;
         private readonly IMemoryCache _cache;
+        private readonly ImageProcessingChannel _channel;
 
-        public ImageController(IRestApiExampleClient client, IMemoryCache cache)
+        public ImageController(IRestApiExampleClient client, IMemoryCache cache, ImageProcessingChannel channel)
         {
             _client = client;
             _cache = cache;
+            _channel = channel;
         }
 
         public IActionResult Get()
@@ -44,10 +46,17 @@ namespace Infestation.Controllers
             return View(model);
         }
 
-        //[HttpPost]
-        //public IActionResult Upload()
-        //{
-        //    return View();
-        //}
+        [HttpPost]
+        public IActionResult Upload(ImageUploadViewModel viewModel)
+        {
+            if (viewModel.Image?.Length > 0)
+            {
+                _channel.Write(viewModel.Image);                
+                viewModel.Image = null;
+                viewModel.UploadStage = UploadStage.Completed;
+            }
+
+            return View(viewModel);
+        }
     }
 }

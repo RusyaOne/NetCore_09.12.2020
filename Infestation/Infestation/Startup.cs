@@ -38,10 +38,12 @@ namespace Infestation
             services.AddScoped<IMessageSender, SmsMessageSender>();
 
             services.AddSingleton<IRestApiExampleClient, RestApiExampleClient>();
+            services.AddSingleton<ImageProcessingChannel>();            
 
             services.AddMemoryCache();
 
             services.AddHostedService<LoadFileHostedService>();
+            services.AddHostedService<UploadFileHostedService>();
 
             services.AddDbContext<InfestationDbContext>();
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<InfestationDbContext>();
