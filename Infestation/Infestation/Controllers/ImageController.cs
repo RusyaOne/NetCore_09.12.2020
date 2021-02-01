@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -47,11 +48,11 @@ namespace Infestation.Controllers
         }
 
         [HttpPost]
-        public IActionResult Upload(ImageUploadViewModel viewModel)
+        public async Task<IActionResult> Upload(ImageUploadViewModel viewModel)
         {
             if (viewModel.Image?.Length > 0)
             {
-                _channel.Write(viewModel.Image);                
+                await _channel.Write(viewModel.Image);                
                 viewModel.Image = null;
                 viewModel.UploadStage = UploadStage.Completed;
             }

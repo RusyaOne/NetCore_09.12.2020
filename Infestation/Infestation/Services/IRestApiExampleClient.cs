@@ -10,7 +10,7 @@ namespace Infestation.Services
     public interface IRestApiExampleClient
     {
         public byte[] GetFileBytes();
-
-        public void UploadFile([NotNull]IFormFile image);
+        public void UploadFile(IFormFile image);
+        public void UploadFile(string imageName, byte[] image);
     }
 }

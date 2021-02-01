@@ -25,15 +25,36 @@ namespace Infestation.Services
                 try
                 {
                     image.CopyTo(stream);
+                    request.AddJsonBody(Convert.ToBase64String(stream.ToArray()));
+                    request.AddQueryParameter("imageName", image.FileName);
+                    client.Execute(request);
                 }
-                catch (Exception e)
+                catch (ObjectDisposedException)
                 {
-                    var message = e.Message;
+                    //TODO: Add logging here and supress
                 }
-                request.AddJsonBody(Convert.ToBase64String(stream.ToArray()));
-                request.AddQueryParameter("imageName", image.FileName);
+                catch
+                {
+                    throw;
+                }
+            }
+        }
+
+        public void UploadFile(string imageName, byte[] image)
+        {
+            var client = new RestClient("http://localhost:56090");
+            var request = new RestRequest("File", Method.POST);
+            try
+            {
+                request.AddJsonBody(Convert.ToBase64String(image));
+                request.AddQueryParameter("imageName", imageName);
                 client.Execute(request);
             }
+            catch
+            {
+                //TODO: return thwrowing exception after testing
+                //throw;
+            }            
         }
     }
 }

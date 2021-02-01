@@ -23,13 +23,12 @@ namespace Infestation.Services
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                IFormFile image = _channel.Read();
-                if (image != null)
+                await foreach((string ImageName, byte[] Image) image in _channel.ReadAll())
                 {
-                    _client.UploadFile(image);
+                    _client.UploadFile(image.ImageName, image.Image);
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(15));
+                await Task.Delay(TimeSpan.FromSeconds(30));
             }
         }
     }
