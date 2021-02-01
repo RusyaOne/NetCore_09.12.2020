@@ -1,8 +1,7 @@
 ﻿function OpenConnection() {
     let webSocket
-    var getWebSocketMessages = function (onMessageReceived) {
-        let username = document.getElementById('username');
-        let url = `wss://${location.host}/stream/get?username=${username.value}`;
+    function GetWebSocketMessages(onMessageReceived) {
+        let url = `wss://${location.host}/stream/get`;
         webSocket = new WebSocket(url);
 
         webSocket.onmessage = onMessageReceived;
@@ -10,7 +9,7 @@
 
     let ulElement = document.getElementById('chatMessages');
 
-    getWebSocketMessages(function (message) {
+    GetWebSocketMessages(function (message) {
         ulElement.innerHTML = ulElement.innerHTML += `<li>${message.data}</li>`
     });
 
@@ -20,4 +19,6 @@
         webSocket.send(text);
         textElement.value = '';
     });
-}
+};
+
+OpenConnection();

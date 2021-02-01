@@ -1,5 +1,5 @@
-﻿(function () {
-    var getWebSocketMessages = function (onMessageReceived) {
+﻿function SendHandshake() {
+    function GetWebSocketMessages(onMessageReceived) {
         var url = `wss://${location.host}/stream/get`
         console.log('url is: ' + url);
 
@@ -10,7 +10,9 @@
 
     var ulElement = document.getElementById('StreamToMe');
 
-    getWebSocketMessages(function (message) {
+    GetWebSocketMessages(function (message) {
         ulElement.innerHTML = ulElement.innerHTML += `<li>${message.data}</li>`
     });
-}());
+};
+
+SendHandshake();

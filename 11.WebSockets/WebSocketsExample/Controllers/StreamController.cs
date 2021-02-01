@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -12,37 +10,45 @@ namespace WebSocketsExample.Controllers
 {
     public class StreamController : Controller
     {
-        private WebSocketsHandler _handler;
+        private readonly WebSocketHandler _webSocketHandler;
 
-        public StreamController(WebSocketsHandler handler)
+        public StreamController(WebSocketHandler webSocketHandler)
         {
-            _handler = handler;
+            _webSocketHandler = webSocketHandler;
         }
 
-
-        public async Task Get(string username)
+        public async Task<IActionResult> Index()
         {
-            var context = ControllerContext.HttpContext;
-            var isWebSocketRequest = context.WebSockets.IsWebSocketRequest;
+            return View();
+        }
 
-            if (isWebSocketRequest)
+        public async Task<IActionResult> Chat()
+        {
+            return View();
+        }
+
+        public async Task Get()
+        {
+            if (HttpContext.WebSockets.IsWebSocketRequest)
             {
-                WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                await _handler.HandleAsync(username, webSocket);
+                WebSocket webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+                await _webSocketHandler.Handle(Guid.NewGuid(), webSocket);
+                //await SendMessages(webSocket);
             }
             else
             {
-                context.Response.StatusCode = 400;
+                HttpContext.Response.StatusCode = 400;
             }
         }
 
-        private async Task SendMessage(WebSocket webSocket)
+        private async Task SendMessages(WebSocket webSocket)
         {
-            for (int i = 0; ;i++)
+            int i = 0;
+            while (true)
             {
-                var bytes = Encoding.ASCII.GetBytes("Message" + i);
-                await webSocket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
-                Thread.Sleep(1000);
+                byte[] message = Encoding.UTF8.GetBytes($"Message {i++}");
+                await webSocket.SendAsync(new ArraySegment<byte>(message), WebSocketMessageType.Text, true, CancellationToken.None);
+                await Task.Delay(TimeSpan.FromSeconds(5));
             }
         }
     }
