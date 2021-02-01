@@ -1,54 +1,25 @@
-﻿using Calculator;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Calculator;
+using System;
+using Xunit;
 
 namespace CalculatorTests
 {
-    [TestClass]
     public class BasicOperationsTests
     {
-        [TestMethod]
-        public void Add_AddPositiveNumbers_ResultIsCorrect()
-        {
-            var basicOperations = new BasicOperations();
-
-            //Мы вставляем произвольные значения, однако они должны быть указаны явно
-            //Это означает, что не стоит применять никаких Math.Random() и тому подобных методов.
-            //Тестовый метод должен быть максимально стабильным
-            var result = basicOperations.Add(5, 1);
-
-            Assert.AreEqual(result, 6);
-        }
-
-        [TestMethod]
-        public void Add_AddPositiveNumbersUsingAAA_ResultIsCorrect()
+        [Theory]
+        [InlineData(4, 5, 9)]
+        [InlineData(1, 3, 4)]
+        [InlineData(-1, 53, 52)]
+        public void Add_AddTwoIntegers_ResultIsCorrect(int firstNumber, int secondNumber, int expected)
         {
             //Arrange
-            var basicOperations = new BasicOperations();
+            BasicOperations basicOperations = new BasicOperations();
 
             //Act
-            var result = basicOperations.Add(5, 1);
+            var result = basicOperations.Add(firstNumber, secondNumber);
 
             //Assert
-            var expectedResult = 6;
-            Assert.AreEqual(result, expectedResult);
+            Assert.Equal(expected, result);
         }
-
-        [TestMethod]
-        public void Add_AddNegativeNumbers_ResultIsCorrect()
-        {
-            //Lets try to use debug mode here
-            //Arrange
-            var basicOperations = new BasicOperations();
-
-            //Act
-            var result = basicOperations.Add(-5, -1);
-
-            //Assert
-            var expectedResult = -6;
-            Assert.AreEqual(result, expectedResult);
-        }
-
-        //Напишите сами тест для метода Substract, 
-        //при этом соблюдайте разделение теста на 3 логические части
     }
 }
