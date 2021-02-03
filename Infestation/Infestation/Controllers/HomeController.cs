@@ -9,15 +9,11 @@ namespace Infestation.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IHumanRepository _humanRepository;
         private readonly ICountryRepository _countryRepository;
 
-        public HomeController(ILogger<HomeController> logger,
-            IHumanRepository humanRepository,
-            ICountryRepository countryRepository)
+        public HomeController(IHumanRepository humanRepository, ICountryRepository countryRepository)
         {
-            _logger = logger;
             _humanRepository = humanRepository;
             _countryRepository = countryRepository;
         }
