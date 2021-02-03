@@ -5,7 +5,7 @@
 3) Создаем SQL server в Azure:       az sql server create --name infestation --resource-group InfestationResourceGroup --location "West Europe" --admin-user TestUser --admin-password password
 4) Конфигурим firewall:      az sql server firewall-rule create --resource-group InfestationResourceGroup --server infestation --name AllowAzureIps --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0    
 Если 0.0.0.0 то достучаться к SQL серверу можно только из других ресурсов Azure. Устанавливаем на свой локальный адрес.
-5) Создаем БД:      az sql db create --resource-group InfestationResourceGroup --server infestation --name InfesttionDB --service-objective S0
+5) Создаем БД:      az sql db create --resource-group InfestationResourceGroup --server infestation --name InfestationDB --service-objective S0
 6) Формируем строку подключения:      az sql db show-connection-string --client ado.net --server infestation --name InfesttionDB
 7) Заменяем строку подключения в проекте и запускаем приложение локально и смотрим что запрос и правда идет к базе в Azure.
 
